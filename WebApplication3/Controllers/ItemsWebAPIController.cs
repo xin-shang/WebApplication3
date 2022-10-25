@@ -21,11 +21,32 @@ namespace WebApplication3.Controllers
             _context = context;
         }
 
+        /* *
+         * GET: 用于从Web服务检索数据
+         * **/
         // GET: api/ItemsWebAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems(string? SearchText, int? CategoryID)
         {
-            return await _context.Items.ToListAsync();
+            if (_context.Items == null) 
+            {
+                return NotFound();
+            }
+
+            var query = _context.Items.Select(i => i);
+            if (!string.IsNullOrWhiteSpace(SearchText)) 
+            {
+                query = query.Where(i => i.ItemName.StartsWith(SearchText));
+            }
+
+            if (CategoryID.HasValue) 
+            {
+                query = query.Where(i => i.Category.ParentCategoryId == CategoryID);
+            }
+
+            query = query.OrderBy(i => i.ItemName);
+
+            return await query.ToListAsync();
         }
 
         // GET: api/ItemsWebAPI/5
@@ -42,6 +63,10 @@ namespace WebApplication3.Controllers
             return item;
         }
 
+
+        /* *
+         * PUT: 用于更新Web服务上的数据
+         * **/
         // PUT: api/ItemsWebAPI/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -73,6 +98,10 @@ namespace WebApplication3.Controllers
             return NoContent();
         }
 
+
+        /* *
+         * POST: 用于在Web服务上创建新的数据项
+         * **/
         // POST: api/ItemsWebAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -84,6 +113,9 @@ namespace WebApplication3.Controllers
             return CreatedAtAction("GetItem", new { id = item.ItemId }, item);
         }
 
+        /* *
+         * DELETE: 用于删除Web服务上的一项数据
+         * **/
         // DELETE: api/ItemsWebAPI/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(int id)

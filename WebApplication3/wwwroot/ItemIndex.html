@@ -1,0 +1,35 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+    <div class="row justify-content-start mt-2">
+        <div class="col-4 mb-2">
+            <div class="card mb-3">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Card text</p>
+                    <p class="card-text"><small class="text-muted">Price</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    var row = document.querySelector(".row.justify-content-start");
+    for (let i = 0; i < 10; i++) {
+        var col = row.querySelector("div.col-4").cloneNode(true);
+        row.appendChild(col);
+    }
+</script>
