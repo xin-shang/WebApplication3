@@ -11,25 +11,121 @@
     <title>Hello, world!</title>
 </head>
 <body>
+    <div class="row mb-3">
+
+        <div class="col-3">
+            <input name="SearchText" class="form-control" placeholder="Item Search..."/>
+        </div>
+        
+        <div class="col-3">
+            <select name="CategoryId" class="form-control">
+                <option value=""> All Categories... </option>
+            </select>
+        </div>
+
+        <div class="col">
+            <button type="button" class="btn btn-outline-primary">Search</button>
+        </div>
+
+    </div>
+
     <div class="row justify-content-start mt-2">
         <div class="col-4 mb-2">
             <div class="card mb-3">
+
                 <img src="..." class="card-img-top" alt="...">
+
                 <div class="card-body">
                     <h5 class="card-title">Card title</h5>
                     <p class="card-text">Card text</p>
                     <p class="card-text"><small class="text-muted">Price</small></p>
                 </div>
+
             </div>
         </div>
     </div>
 </body>
 </html>
 
+
 <script>
-    var row = document.querySelector(".row.justify-content-start");
-    for (let i = 0; i < 10; i++) {
-        var col = row.querySelector("div.col-4").cloneNode(true);
-        row.appendChild(col);
+
+    fetch('/api/ItemsWebAPI')
+        .then(response => response.json())
+        .then(data => buildItems(data))
+        .catch(error => console.error('Unable to get items.', error));
+
+    fetch('/api/ParentItemCategoriesWebAPI')
+        .then((response) => response.json())
+        .then(data => {
+            let select = document.querySelector('select[name="CategoryId"]');
+
+            data.forEach(c => {
+                let opt = document.createElement("option");
+                opt.value = c.categoryId;
+                opt.innerText = c.categoryName;
+                select.appendChild(opt);
+            })
+        })
+
+    function buildItems(data) {
+
+        // 1. Get a reference to the bootstrap row
+        var row = document.querySelector(".row.justify-content-start");
+
+        // 2. Create a for-loop to mimic multiple records
+        for (let i = 0; i < data.length; i++) {
+
+            // 3. Select the column in the row copy and make a deep clone
+            // var col = row.querySelector("div.col-4").cloneNode(true);
+
+            // 6. access the elements and set their new properties
+            // col.querySelector('h5').innerText = data[i].itemName;
+            // let pList = col.querySelectorAll('p');
+            // pList[0].innerText = data[i].itemDescription;
+            // pList[1].innerText = data[i].itemCost;
+
+            let col = document.createElement('div');
+            col.classList.add('col-4', 'mb-2');
+
+            let card = document.createElement('div');
+            card.classList.add('card');
+            col.appendChild(card);
+
+            let cardB = document.createElement('div');
+            cardB.classList.add('card-body');
+            card.appendChild(cardB);
+
+            let title = document.createElement('h5');
+            title.innerText = data[i].itemName;
+            title.classList.add('card-title');
+            cardB.appendChild(title);
+
+            let cardT = document.createElement('p');
+            cardT.innerText = data[i].itemDescription;
+            cardT.classList.add('card-text');
+            cardB.appendChild(cardT);
+
+            let cardP = document.createElement('p');
+            cardP.innerText = data[i].itemCost;
+            cardP.classList.add('card-text');
+            cardB.appendChild(cardP);
+
+            let img = document.createElement('img');
+            img.setAttribute("src", data[i].itemImage);
+            img.setAttribute("alt", "image of" + data[i].itemName);
+            img.classList.add("card-img-top");
+            card.appendChild(img);
+
+            // 4. append the new column as a child of the bootstrap row
+            row.appendChild(col);
+
+            // 8. remove the original node that was cloned
+            // if (i == 9) {
+            //     row.removeChild(row.querySelector("div.col-4"));
+            // }
+
+        }
+
     }
 </script>

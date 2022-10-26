@@ -9,51 +9,31 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemCost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemImage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemCost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemImage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+
+
+<div class="row row-cols-auto row-cols-md-3 g-60">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100">
+
+                <div class="card-img-top">
+                    <img class="card-img" src="@Html.DisplayFor(modeItem => item.ItemImage)">
+                </div>
+
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemName)</h5>
+                    <p class="card-text">Category: @Html.DisplayFor(modeItem => item.Category.CategoryName)</p>
+                    <p class="card-text">Description: @Html.DisplayFor(modeItem => item.ItemDescription)</p>
+                    <p class="card-text">Cost: @Html.DisplayFor(modeItem => item.ItemCost)</p>
+
+                    <a href="#" class="btn btn-primary">View Iten Detail</a>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+
+
